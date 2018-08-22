@@ -41,7 +41,8 @@ app.config.from_object(DevelopmentConfig) #here is where we decide if Developmen
 #after config
 #csrf = CsrfProtect() #now we do this at the end, in if __name__...
 #this is what the video said, but it gives a warning, the one one line below works without warnings
-csrf = CSRFProtect()
+#csrf = CSRFProtect() THIS WASN'T WORKING
+csrf = CSRFProtect(app) #from https://flask-wtf.readthedocs.io/en/stable/csrf.html
 mail = Mail()
 
 def send_email(user_email, username): #to know where to send it and write the username in the email
@@ -192,15 +193,16 @@ def reviews(page = 1): # =1 is only the default value, so /reviews/ and /reviews
 def after_request(response):
 	return response #always return response
 
-
+db.init_app(app) #this was supposed to be inside if __name__ but it didn't work: https://stackoverflow.com/questions/30764073/sqlalchemy-extension-isnt-registered-when-running-app-with-gunicorn
+mail.init_app(app) #same as db.init_app
 
 if __name__ == '__main__':
 	#before config:
 	#app.run(debug=True)
 
 	csrf.init_app(app) #this one after config
-	db.init_app(app)
-	mail.init_app(app)
+	#db.init_app(app)
+	#mail.init_app(app)
 
 	with app.app_context():
 		db.create_all() #this will create every table that IS NOT created already

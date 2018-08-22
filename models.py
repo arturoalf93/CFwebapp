@@ -31,7 +31,7 @@ class userstest(db.Model): #this is imported then in main.py, so if the name cha
 class Comment(db.Model):
 	__tablename__ = 'comments'
 
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key = True)
 	user_id = db.Column(db.Integer, db.ForeignKey('userstest.id')) #FOREIGN KEY. We also have to write the relationship in userstest
 	text = db.Column(db.Text()) #Text is just larger than String
 	created_date = db.Column(db.DateTime, default = datetime.datetime.now)
